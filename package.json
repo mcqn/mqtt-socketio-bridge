@@ -1,0 +1,24 @@
+{
+  "name": "mqtt-socketio-bridge",
+  "version": "1.0.0",
+  "description": "Simple server to provide a Socket.io interface to an MQTT broker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcqn/mqtt-socketio-bridge.git"
+  },
+  "author": "Adrian McEwen",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/mcqn/mqtt-socketio-bridge/issues"
+  },
+  "homepage": "https://github.com/mcqn/mqtt-socketio-bridge#readme",
+  "dependencies": {
+    "express": "^4.15.2",
+    "mqtt": "^2.18.8",
+    "socket.io": "^2.2.0"
+  }
+}
