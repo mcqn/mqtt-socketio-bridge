@@ -9,6 +9,8 @@ var app = require('express')()
 var http = require('http').Server(app)
 var socketio = require('socket.io')(http)
 
+var port = process.env.PORT || 3000;
+
 // Enter details of the MQTT broker that you want to interface to
 // By default we'll use the public HiveMQ one, so any Arduino clients using
 // the PubSubClient library can easily talk to it
@@ -51,6 +53,6 @@ app.get('/', function(req, res) {
         res.sendFile(__dirname+"/static_files/mqtt-socket.html")
 })
 
-http.listen(80, function() {
-        console.log("listening on 80")
+http.listen(port, function() {
+        console.log("listening on "+port)
 })
