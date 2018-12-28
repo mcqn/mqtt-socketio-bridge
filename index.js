@@ -48,7 +48,7 @@ socketio.sockets.on('connection', function(sock) {
 // Set up web server to serve 
 app.get('/', function(req, res) {
         //res.send("<h1>Hello world</h1>")
-        res.sendFile("/var/www/html/mqtt-socket.html")
+        res.sendFile(__dirname+"/static_files/mqtt-socket.html")
 })
 
 http.listen(3000, function() {
