@@ -56,8 +56,8 @@ app.get('/', function(req, res) {
 })
 
 // Serve the JS used by the example page
-app.get('/jquery-3.3.1.slim.min.js', function(req, res) {
-        res.sendFile(__dirname+"/static_files/jquery-3.3.1.slim.min.js")
+app.get('/jquery-3.3.1.min.js', function(req, res) {
+        res.sendFile(__dirname+"/static_files/jquery-3.3.1.min.js")
 })
 
 http.listen(port, function() {

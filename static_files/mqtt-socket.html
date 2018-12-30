@@ -6,38 +6,41 @@
         <script src="/socket.io/socket.io.js"></script>
         <!-- Include jQuery, just used here for some of the DOM manipulation and
              AJAX calls.  Not *required* for the MQTT-SocketIO bridge itself -->
-        <script src="/jquery-3.3.1.slim.min.js"></script>
+        <script src="/jquery-3.3.1.min.js"></script>
 
         <script>
                 // Bring up a socket.io connection
-                var sock = io.connect()
-                sock.on('connect', function() {
+                var socket = io.connect()
+                socket.on('connect', function() {
                         // Subscribe to the topic(s) we're interested in
-                        sock.emit('subscribe', { 'topic': 'mcqn/#' })
+                        socket.emit('subscribe', { 'topic': 'mcqn/#' })
                 });
                 // Set up callback for whenever an MQTT message arrives
-                sock.on('mqtt', function(msg) {
+                socket.on('mqtt', function(msg) {
                         console.log("message: ["+msg.topic+"] >>"+msg.payload+"<<")
                 });
         </script>
+
 </head>
 <body>
         <h1>Simple Demo of MQTT-to-Socket.IO-Bridge</h1>
 
         <h2>Subscribe</h2>
-        <form>
+        <form id='subscribe' method='post'>
                 <label for="subs_topic">Topic</label>
-                <input name="subs_topic" type="text" />
-                <input name="subscribe" type="submit" value="subscribe" />
+                <input name="subs_topic" id="subs_topic" type="text" />
+                <input name="subscribe" type="submit" value="subscribe" onclick="$('#subs_status').text('Working...').show(); socket.emit('subscribe', { 'topic': $('#subs_topic')[0].value }); $('#subs_status').text('Ok').fadeOut(2000); return false;" />
+                <span id="subs_status"></span>
         </form>
         
         <h2>Publish</h2>
         <form>
                 <label for="pub_topic">Topic</label>
-                <input name="pub_topic" type="text" />
+                <input id="pub_topic" name="pub_topic" type="text" />
                 <label for="pub_payload">Payload</label>
-                <input name="pub_payload" type="text" />
-                <input name="publish" type="submit" value="subscribe" />
+                <input id="pub_payload" name="pub_payload" type="text" />
+                <input name="publish" type="submit" value="publish" onclick="$('#pub_status').text('Working...').show(); socket.emit('publish', { 'topic': $('#pub_topic')[0].value, 'payload': $('#pub_payload')[0].value }); $('#pub_status').text('Ok').fadeOut(2000); return false;" />
+                <span id="pub_status"></span>
         </form>
         
         <h2>Messages Received</h2>
