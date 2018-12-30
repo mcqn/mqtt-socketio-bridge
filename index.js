@@ -26,7 +26,7 @@ client.on('message', function(topic, payload) {
         console.log("topic: "+topic)
         console.log("payload: "+payload)
         // Send it to any interested sockets
-        socketio.sockets.emit('mqtt', { 'topic': topic, 'payload': payload })
+        socketio.sockets.emit('mqtt', { 'topic': topic, 'payload': payload.toString() })
 })
 
 socketio.sockets.on('connection', function(sock) {
