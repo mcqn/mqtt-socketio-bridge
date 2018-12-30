@@ -2,11 +2,20 @@
 <html>
 <head>
         <title>Simple Demo of MQTT-to-Socket.IO-Bridge</title>
-        <notscript src="https://cdn.socket.io/socket.io-1.3.5.js"></notscript>
+        <!-- Pull in the socket.io library -->
         <script src="/socket.io/socket.io.js"></script>
+        <!-- Include jQuery, just used here for some of the DOM manipulation and
+             AJAX calls.  Not *required* for the MQTT-SocketIO bridge itself -->
+        <script src="/jquery-3.3.1.slim.min.js"></script>
 
         <script>
-                var sock = io.connect() //('localhost:5000')
+                // Bring up a socket.io connection
+                var sock = io.connect()
+                sock.on('connect', function() {
+                        // Subscribe to the topic(s) we're interested in
+                        sock.emit('subscribe', { 'topic': 'mcqn/#' })
+                });
+                // Set up callback for whenever an MQTT message arrives
                 sock.on('mqtt', function(msg) {
                         console.log("message: ["+msg.topic+"] >>"+msg.payload+"<<")
                 });
@@ -14,5 +23,26 @@
 </head>
 <body>
         <h1>Simple Demo of MQTT-to-Socket.IO-Bridge</h1>
+
+        <h2>Subscribe</h2>
+        <form>
+                <label for="subs_topic">Topic</label>
+                <input name="subs_topic" type="text" />
+                <input name="subscribe" type="submit" value="subscribe" />
+        </form>
+        
+        <h2>Publish</h2>
+        <form>
+                <label for="pub_topic">Topic</label>
+                <input name="pub_topic" type="text" />
+                <label for="pub_payload">Payload</label>
+                <input name="pub_payload" type="text" />
+                <input name="publish" type="submit" value="subscribe" />
+        </form>
+        
+        <h2>Messages Received</h2>
+
+        <ul id="messages">
+        </ul>
 </body>
 </html>

@@ -49,8 +49,12 @@ socketio.sockets.on('connection', function(sock) {
 
 // Set up web server to serve 
 app.get('/', function(req, res) {
-        //res.send("<h1>Hello world</h1>")
         res.sendFile(__dirname+"/static_files/mqtt-socket.html")
+})
+
+// Serve the JS used by the example page
+app.get('/jquery-3.3.1.slim.min.js', function(req, res) {
+        res.sendFile(__dirname+"/static_files/jquery-3.3.1.slim.min.js")
 })
 
 http.listen(port, function() {
