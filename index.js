@@ -36,8 +36,11 @@ socketio.sockets.on('connection', function(sock) {
         // ...subscribe messages
         sock.on('subscribe', function(msg) {
                 console.log("Asked to subscribe to "+msg.topic)
-                sock.join(msg.topic)
-                client.subscribe(msg.topic)
+                if (msg.topic !== undefined) {
+                        sock.join(msg.topic)
+                        client.subscribe(msg.topic)
+                }
+                // FIXME else It'd be nice to report the error back to the user
         })
 
         // ...publish messages
