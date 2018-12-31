@@ -13,12 +13,16 @@
                 var socket = io.connect()
                 socket.on('connect', function() {
                         // Subscribe to the topic(s) we're interested in
-                        socket.emit('subscribe', { 'topic': 'mcqn/#' })
-                });
+                        // Uncomment this line if you want to automatically subscribe to a topic
+                        //socket.emit('subscribe', { 'topic': 'mcqn/#' })
+                })
                 // Set up callback for whenever an MQTT message arrives
                 socket.on('mqtt', function(msg) {
                         console.log("message: ["+msg.topic+"] >>"+msg.payload+"<<")
-                });
+                        // For this example page, we'll just push the new message
+                        // to the top of a simple list
+                        $('#messages').prepend("<li>["+msg.topic+"] "+msg.payload+"</li>")
+                })
         </script>
 
 </head>
@@ -26,6 +30,9 @@
         <h1>Simple Demo of MQTT-to-Socket.IO-Bridge</h1>
 
         <h2>Subscribe</h2>
+        <p>In order to receive any messages you need to subscribe to one or more "topics".  You can have hierarchies of topics by separating them with "/", for example: <code>mymaintopic/subtopic1</code> and <code>mymaintopic/subtopic2</code>.  If you want to get messages from all of the subtopics you can use "#" as a wildcard, for example: <code>mymaintopic/#</code> would receive messages from either of the subtopics mentioned earlier.</p>
+        <p>If you aren't sure which topic to try to start, <code>test/#</code> is a good bet.</p>
+        <p>Use the form below to add new subscriptions:</p>
         <form id='subscribe' method='post'>
                 <label for="subs_topic">Topic</label>
                 <input name="subs_topic" id="subs_topic" type="text" />
@@ -34,6 +41,7 @@
         </form>
         
         <h2>Publish</h2>
+        <p>Use this form to publish messages.</p>
         <form>
                 <label for="pub_topic">Topic</label>
                 <input id="pub_topic" name="pub_topic" type="text" />
@@ -44,6 +52,7 @@
         </form>
         
         <h2>Messages Received</h2>
+        <p>Once you have subscribed to at least one topic, any messages received will be shown below in the form <code>[topic name] payload</code>.
 
         <ul id="messages">
         </ul>

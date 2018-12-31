@@ -18,8 +18,7 @@ var MQTT_SERVER = "mqtt://broker.mqtt-dashboard.com"
 
 var client = mqtt.connect(MQTT_SERVER)
 client.on('connect', function() {
-        client.subscribe('mcqn/#')
-        client.publish('mcqn/hello', 'world')
+        console.log("Connected to "+MQTT_SERVER);
 })
 
 client.on('message', function(topic, payload) {
