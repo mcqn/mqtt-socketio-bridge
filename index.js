@@ -4,17 +4,26 @@
 //
 
 var mqtt = require('mqtt')
-//var socketio = require('socket.io').listen(5000)
 var app = require('express')()
 var http = require('http').Server(app)
-var socketio = require('socket.io')(http)
+var io = require('socket.io')(http)
 
+// Port that the web server should listen on
 var port = process.env.PORT || 3000;
 
 // Enter details of the MQTT broker that you want to interface to
 // By default we'll use the public HiveMQ one, so any Arduino clients using
 // the PubSubClient library can easily talk to it
 var MQTT_BROKER = process.env.MQTT_BROKER || "mqtt://broker.mqtt-dashboard.com"
+
+// We need to cope with wildcards in topics, so can't just do a simple comparison
+// This function returns true if they match and false otherwise
+// topic1 can include wildcards, topic2 can't
+var topicMatch = function(topic1, topic2) {
+        // Switch our wildcards from MQTT style to Regexp style
+        var matchStr = topic1.replace(/#/g, ".*")
+        return (topic2.match("^"+matchStr+"$") != null)
+}
 
 var client = mqtt.connect(MQTT_BROKER)
 client.on('connect', function() {
@@ -25,10 +34,18 @@ client.on('message', function(topic, payload) {
         console.log("topic: "+topic)
         console.log("payload: "+payload)
         // Send it to any interested sockets
-        socketio.sockets.emit('mqtt', { 'topic': topic, 'payload': payload.toString() })
+        Object.keys(io.sockets.adapter.rooms).map(function(room_name) {
+                // See if this room matches the topic
+                if (topicMatch(room_name, topic)) {
+                        // It does.  Send the message
+                        for (var clientId in io.sockets.adapter.rooms[room_name].sockets) {
+                                io.sockets.connected[clientId].emit('mqtt', { 'topic': topic, 'payload': payload.toString() })
+                        }
+                }
+        })
 })
 
-socketio.sockets.on('connection', function(sock) {
+io.sockets.on('connection', function(sock) {
         // New connection, listen for...
         console.log("New connection")
 
@@ -37,7 +54,11 @@ socketio.sockets.on('connection', function(sock) {
                 console.log("Asked to subscribe to "+msg.topic)
                 if (msg.topic !== undefined) {
                         sock.join(msg.topic)
-                        client.subscribe(msg.topic)
+                        if (io.sockets.adapter.rooms[msg.topic].length == 1) {
+                                // We're the first one in the room, subscribe to the MQTT topic
+                                client.subscribe(msg.topic)
+                        }
+                        // else someone is already here, so we'll have an MQTT subscription already
                 }
                 // FIXME else It'd be nice to report the error back to the user
         })
