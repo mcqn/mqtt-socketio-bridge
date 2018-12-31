@@ -47,7 +47,7 @@ client.on('message', function(topic, payload) {
 
 io.sockets.on('connection', function(sock) {
         // New connection, listen for...
-        console.log("New connection")
+        console.log("New connection from "+sock.id)
 
         // ...subscribe messages
         sock.on('subscribe', function(msg) {
@@ -68,6 +68,23 @@ io.sockets.on('connection', function(sock) {
                 console.log("socket published ["+msg.topic+"] >>"+msg.payload+"<<")
                 client.publish(msg.topic, msg.payload)
         })
+
+        // ...and disconnections
+        sock.on('disconnect', function(reason) {
+                console.log("disconnect from "+sock.id)
+                // The socket will have left all its rooms now, so see if there
+                // are any empty ones
+                for (var sub in client._resubscribeTopics) {
+                        if (io.sockets.adapter.rooms[sub] == undefined) {
+                                // There's no "room" for this subscription, so no clients
+                                // are watching it, so we should unsubscribe
+                                console.log("Unsubscribing from "+sub)
+                                client.unsubscribe(sub)
+                        }
+                        // else someone is watching, so leave this MQTT subscription in place
+                }
+        })
+
 })
 
 // Set up web server to serve 
