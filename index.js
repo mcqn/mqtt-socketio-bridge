@@ -14,11 +14,11 @@ var port = process.env.PORT || 3000;
 // Enter details of the MQTT broker that you want to interface to
 // By default we'll use the public HiveMQ one, so any Arduino clients using
 // the PubSubClient library can easily talk to it
-var MQTT_SERVER = "mqtt://broker.mqtt-dashboard.com"
+var MQTT_BROKER = process.env.MQTT_BROKER || "mqtt://broker.mqtt-dashboard.com"
 
-var client = mqtt.connect(MQTT_SERVER)
+var client = mqtt.connect(MQTT_BROKER)
 client.on('connect', function() {
-        console.log("Connected to "+MQTT_SERVER);
+        console.log("Connected to "+MQTT_BROKER);
 })
 
 client.on('message', function(topic, payload) {
