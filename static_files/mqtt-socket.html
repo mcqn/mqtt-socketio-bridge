@@ -2,6 +2,19 @@
 <html>
 <head>
         <title>Simple Demo of MQTT-to-Socket.IO-Bridge</title>
+
+        <style>
+                body { margin: 0; font-family: Verdana, "Helvetica Neue", Arial, sans-serif; }
+                span { color: #5b5; font-weight: bold; }
+                code { background: #ccd; padding: 2px 5px; border-width: 1px; border-color: #aaa; border-radius: 3px }
+                header { padding: 1em; background: #303034; color: white }
+                header a { color: white }
+                header h1 { margin: 0 }
+                #credits { float: right; }
+                #credits div { float: left; text-align: right; margin-right: 0.5em; }
+                section { padding: 1em; }
+                li { font-family: Monospace; font-size: larger; }
+        </style>
         <!-- Pull in the socket.io library -->
         <script src="/socket.io/socket.io.js"></script>
         <!-- Include jQuery, just used here for some of the DOM manipulation and
@@ -27,34 +40,51 @@
 
 </head>
 <body>
-        <h1>Simple Demo of MQTT-to-Socket.IO-Bridge</h1>
+        <header>
+                <div id='credits'>
+                        <a href="https://mcqn.com/ibal206"><img src="mcqn_logo.svg" alt="MCQN Ltd logo"/></a>
+<div>
+                        <a href="https://github.com/mcqn/mqtt-socketio-bridge">code</a>
+                        <br />
+                        <a href="https://mcqn.com/ibal206">mcqn.com/ibal206</a>
+                </div>
+                </div>
+                <h1>Simple Demo of MQTT-to-Socket.IO-Bridge</h1>
+                <br clear="both"/>
+        </header>
 
-        <h2>Subscribe</h2>
-        <p>In order to receive any messages you need to subscribe to one or more "topics".  You can have hierarchies of topics by separating them with "/", for example: <code>mymaintopic/subtopic1</code> and <code>mymaintopic/subtopic2</code>.  If you want to get messages from all of the subtopics you can use "#" as a wildcard, for example: <code>mymaintopic/#</code> would receive messages from either of the subtopics mentioned earlier.</p>
-        <p>If you aren't sure which topic to try to start, <code>test/#</code> is a good bet.</p>
-        <p>Use the form below to add new subscriptions:</p>
-        <form id='subscribe' method='post'>
-                <label for="subs_topic">Topic</label>
-                <input name="subs_topic" id="subs_topic" type="text" />
-                <input name="subscribe" type="submit" value="subscribe" onclick="$('#subs_status').text('Working...').show(); socket.emit('subscribe', { 'topic': $('#subs_topic')[0].value }); $('#subs_status').text('Ok').fadeOut(2000); return false;" />
-                <span id="subs_status"></span>
-        </form>
+        <section>
+                <h2>Subscribe</h2>
+                <p>In order to receive any messages you need to subscribe to one or more "topics".  You can have hierarchies of topics by separating them with "/", for example: <code>mymaintopic/subtopic1</code> and <code>mymaintopic/subtopic2</code>.  If you want to get messages from all of the subtopics you can use "#" as a wildcard, for example: <code>mymaintopic/#</code> would receive messages from either of the subtopics mentioned earlier.</p>
+                <p>If you aren't sure which topic to try to start, <code>test/#</code> is a good bet.</p>
+                <p>Use the form below to add new subscriptions:</p>
+                <form id='subscribe' method='post'>
+                        <label for="subs_topic">Topic</label>
+                        <input name="subs_topic" id="subs_topic" type="text" />
+                        <input name="subscribe" type="submit" value="subscribe" onclick="$('#subs_status').text('Working...').show(); socket.emit('subscribe', { 'topic': $('#subs_topic')[0].value }); $('#subs_status').text('Ok').fadeOut(2000); return false;" />
+                        <span id="subs_status"></span>
+                </form>
+        </section>
         
-        <h2>Publish</h2>
-        <p>Use this form to publish messages.</p>
-        <form id='publish' method='post'>
-                <label for="pub_topic">Topic</label>
-                <input id="pub_topic" name="pub_topic" type="text" />
-                <label for="pub_payload">Payload</label>
-                <input id="pub_payload" name="pub_payload" type="text" />
-                <input name="publish" type="submit" value="publish" onclick="$('#pub_status').text('Working...').show(); socket.emit('publish', { 'topic': $('#pub_topic')[0].value, 'payload': $('#pub_payload')[0].value }); $('#pub_status').text('Ok').fadeOut(2000); return false;" />
-                <span id="pub_status"></span>
-        </form>
+        <section>
+                <h2>Publish</h2>
+                <p>Use this form to publish messages.</p>
+                <form id='publish' method='post'>
+                        <label for="pub_topic">Topic</label>
+                        <input id="pub_topic" name="pub_topic" type="text" />
+                        <label for="pub_payload">Payload</label>
+                        <input id="pub_payload" name="pub_payload" type="text" />
+                        <input name="publish" type="submit" value="publish" onclick="$('#pub_status').text('Working...').show(); socket.emit('publish', { 'topic': $('#pub_topic')[0].value, 'payload': $('#pub_payload')[0].value }); $('#pub_status').text('Ok').fadeOut(2000); return false;" />
+                        <span id="pub_status"></span>
+                </form>
+        </section>
         
-        <h2>Messages Received</h2>
-        <p>Once you have subscribed to at least one topic, any messages received will be shown below in the form <code>[topic name] payload</code>.
+        <section>
+                <h2>Messages Received</h2>
+                <p>Once you have subscribed to at least one topic, any messages received will be shown below in the form <code>[topic name] payload</code>.
 
-        <ul id="messages">
-        </ul>
+                <ul id="messages">
+                </ul>
+        </section>
 </body>
 </html>

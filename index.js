@@ -4,7 +4,8 @@
 //
 
 var mqtt = require('mqtt')
-var app = require('express')()
+var express = require('express')
+var app = express()
 var http = require('http').Server(app)
 var io = require('socket.io')(http)
 
@@ -87,14 +88,12 @@ io.sockets.on('connection', function(sock) {
 
 })
 
+// Serve static files from the 'static_files' folder
+app.use(express.static('static_files'))
+
 // Set up web server to serve 
 app.get('/', function(req, res) {
         res.sendFile(__dirname+"/static_files/mqtt-socket.html")
-})
-
-// Serve the JS used by the example page
-app.get('/jquery-3.3.1.min.js', function(req, res) {
-        res.sendFile(__dirname+"/static_files/jquery-3.3.1.min.js")
 })
 
 http.listen(port, function() {
