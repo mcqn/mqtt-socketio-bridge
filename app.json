@@ -1,0 +1,14 @@
+{
+  "name": "MQTT-SocketIO Bridge",
+  "description": "Simple server to provide a Socket.io interface to MQTT",
+  "repository": "https://github.com/mcqn/mqtt-socketio-bridge",
+  "website": "https://mcqn.com/ibal206",
+  "keywords": ["mqtt", "socketio", "node"],
+  "env": {
+    "MQTT_BROKER": {
+      "description": "This is the URI for the MQTT broker you want to relay messages to/from.  See https://github.com/mqtt/mqtt.github.io/wiki/URI-Scheme for details of the format for it.",
+      "value": "mqtt://broker.mqtt-dashboard.com"
+    }
+  }
+}
+
