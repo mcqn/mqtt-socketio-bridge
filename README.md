@@ -45,7 +45,7 @@ var socket;
 // This is the URL for the MQTT-SocketIO bridge we're connecting to
 var MQTT_BRIDGE = "https://mqtt-socketio-bridge.herokuapp.com/"
 // Which topic should we subscribe to to receive messages?
-// (This can include wildcards - e.g. "mcqn/#" would get messages to "mcqn/123" and "mcqn/somthingelse"
+// (This can include wildcards - e.g. "mcqn/#" would get messages to "mcqn/123" and "mcqn/somethingelse"
 //  but then you should check the topic value in messageReceived too to know which is which)
 var MQTT_TOPIC = "mcqn/test"
 
